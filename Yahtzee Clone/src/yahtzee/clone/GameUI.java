@@ -3,6 +3,8 @@ package yahtzee.clone;
 import javafx.geometry.HPos;
 import javafx.scene.control.Button;
 import javafx.scene.Group;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -27,6 +29,9 @@ public class GameUI {
     private static GridPane scoreCard; //a grid that will contain the scorecard
     private static Group operationButtonGroup = new Group(); //a group for buttons to roll dice and access scorecard
     private Text rollNum, turnNum; //display roll count and turn number to user
+    private static Image background = new Image("background.jpg", 800, 800, false, true);
+    private static ImageView backgroundView = new ImageView(background);
+
     
     //Game UI should also be a singleton
     private static GameUI uniqueInstance = null;
@@ -46,34 +51,59 @@ public class GameUI {
         startbtn.setLayoutX(300);
         startbtn.setLayoutY(400);
         startbtn.setMinSize(100, 50);
-        startbtn.setStyle("-fx-font: 30 arial");
+        startbtn.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
         startbtn.setOnAction(event -> game.startGame(primaryStage, this));
         
         Text title = new Text("Yahtzee");
         title.setStyle("-fx-font: 120 arial");
         title.setLayoutX(175);
         title.setLayoutY(150);
+        title.setFill(Color.WHITE);
+        title.setStroke(Color.BLACK);
+        title.setStrokeWidth(2);
         
         Text summary = new Text("The famous 5-dice game");
         summary.setStyle("-fx-font: 40 arial");
         summary.setLayoutX(180);
         summary.setLayoutY(200);
+        summary.setFill(Color.WHITE);
+        summary.setStroke(Color.BLACK);
+        summary.setStrokeWidth(1);
         
         Button about = new Button("About");
         about.setMinSize(194,50);
         about.setLayoutX(300);
         about.setLayoutY(475);
-        about.setStyle("-fx-font: 30 arial");
+        about.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
         about.setOnAction(event -> displayAbout(primaryStage));
         
         Text author = new Text("Programmed by Julia D.");
         author.setStyle("-fx-font: 20 arial");
         author.setLayoutX(5);
         author.setLayoutY(775);
+        author.setFill(Color.WHITE);
+
+        Image die1 = new Image("Die 1.png", 100, 100, true, true);
+        ImageView viewDie1 = new ImageView(die1);
+        viewDie1.setX(50);
+        viewDie1.setY(50);
+
+        Image die2 = new Image("Die 2.png", 125, 125, true, true);
+        ImageView viewDie2 = new ImageView(die2);
+        viewDie2.setX(65);
+        viewDie2.setY(600);
+
+        Image die3 = new Image("Die 3.png", 150, 150, true, true);
+        ImageView viewDie3 = new ImageView(die3);
+        viewDie3.setX(600);
+        viewDie3.setY(600);
+
+        Group diceGroup = new Group(viewDie1, viewDie2, viewDie3);
         
-        Group root = new Group();
-        root.getChildren().addAll(startbtn, title, summary, about, author);
+        Group objects = new Group();
+        objects.getChildren().addAll(startbtn, title, summary, about, author, diceGroup);
         
+        root = new Group(backgroundView, objects);
         Scene scene = new Scene(root, 800, 800);
         
         primaryStage.setTitle("Yahtzee");
@@ -86,16 +116,23 @@ public class GameUI {
         title.setStyle("-fx-font: 120 arial");
         title.setLayoutX(175);
         title.setLayoutY(150);
+        title.setFill(Color.WHITE);
+        title.setStroke(Color.BLACK);
+        title.setStrokeWidth(2);
         
         Text summary = new Text("The famous 5-dice game");
         summary.setStyle("-fx-font: 40 arial");
         summary.setLayoutX(180);
         summary.setLayoutY(200);
+        summary.setFill(Color.WHITE);
+        summary.setStroke(Color.BLACK);
+        summary.setStrokeWidth(1);
         
         Text author = new Text("Programmed by Julia D.");
         author.setStyle("-fx-font: 20 arial");
         author.setLayoutX(5);
         author.setLayoutY(775);
+        author.setFill(Color.WHITE);
         
         Text about = new Text();
         about.setLayoutX(10);
@@ -105,7 +142,7 @@ public class GameUI {
                 + " The game is entirely\nprogrammed with Java and JavaFX."
                 + " The game has also been designed with the\nassumption that the player"
                 + " already knows how to play Yahtzee. If you don't know"
-                + " how\nto play the game, the rules can be found online."
+                + " how\nto play the game, the rules can be found online or on the GitHub repo."
                 + "\n\nThis is also not the programmer's first attempt at recreating"
                 + " Yahtzee, as she tried to do\nit when she only knew the bare bones"
                 + " of the Java programming langauge. This first\nedition was never"
@@ -114,16 +151,33 @@ public class GameUI {
                 + "\nlearned from her classes, the programmer revamped one of her very first projects."
                 + " Now\nit is not easy to cheat, the scoring logic has improved,"
                 + " and the game has an actual GUI.");
+        about.setFill(Color.WHITE);
         
         Button back = new Button("Back");
         back.setMinSize(194, 50);
         back.setLayoutX(300);
         back.setLayoutY(475);
-        back.setStyle("-fx-font: 30 arial");
+        back.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
         back.setOnAction(event -> displayStartScreen(primaryStage));
+
+        Image die1 = new Image("Die 1.png", 100, 100, true, true);
+        ImageView viewDie1 = new ImageView(die1);
+        viewDie1.setX(50);
+        viewDie1.setY(50);
+
+        Image die2 = new Image("Die 2.png", 125, 125, true, true);
+        ImageView viewDie2 = new ImageView(die2);
+        viewDie2.setX(65);
+        viewDie2.setY(600);
+
+        Image die3 = new Image("Die 3.png", 150, 150, true, true);
+        ImageView viewDie3 = new ImageView(die3);
+        viewDie3.setX(600);
+        viewDie3.setY(600);
+
+        Group diceGroup = new Group(viewDie1, viewDie2, viewDie3);
         
-        Group root = new Group();
-        root.getChildren().addAll(title, summary, author, back, about);
+        root = new Group(backgroundView, title, summary, author, back, about, diceGroup);
         
         Scene scene = new Scene(root, 800, 800);
         primaryStage.setScene(scene);
@@ -144,22 +198,26 @@ public class GameUI {
         rollNum.setStyle("-fx-font: 20 arial");
         rollNum.setLayoutX(450);
         rollNum.setLayoutY(40);
+        rollNum.setFill(Color.WHITE);
         turnNum = new Text("Turn number: " + turnNumber);
         turnNum.setStyle("-fx-font: 20 arial");
         turnNum.setLayoutX(450);
         turnNum.setLayoutY(80);
+        turnNum.setFill(Color.WHITE);
 
         Text gameTitle = new Text("YAHTZEE");
         gameTitle.setStyle("-fx-font: 40 arial");
         gameTitle.setLayoutX(100);
         gameTitle.setLayoutY(40);
+        gameTitle.setFill(Color.WHITE);
         
         Text author = new Text("Programmed by Julia D.");
         author.setStyle("-fx-font: 20 arial");
         author.setLayoutX(5);
         author.setLayoutY(775);
+        author.setFill(Color.WHITE);
 
-        root2 = new Group(diceGroup, holdDieButtonGroup, scoreCard, author, gameTitle, rollNum, turnNum, operationButtonGroup);
+        root2 = new Group(backgroundView, diceGroup, holdDieButtonGroup, scoreCard, author, gameTitle, rollNum, turnNum, operationButtonGroup);
         Scene gameboard = new Scene(root2, 800, 800);
         return gameboard;
     }
@@ -231,6 +289,7 @@ public class GameUI {
         holdDie1.setMaxSize(100, 25);
         holdDie1.setLayoutX(680);
         holdDie1.setLayoutY(145);
+        holdDie1.setStyle("-fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
         
         holdDie2 = new Button("Hold");
         holdDie2.setId("2");
@@ -238,6 +297,7 @@ public class GameUI {
         holdDie2.setMaxSize(100, 25);
         holdDie2.setLayoutX(680);
         holdDie2.setLayoutY(295);
+        holdDie2.setStyle("-fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
         
         holdDie3 = new Button("Hold");
         holdDie3.setId("3");
@@ -245,6 +305,7 @@ public class GameUI {
         holdDie3.setMaxSize(100, 25);
         holdDie3.setLayoutX(680);
         holdDie3.setLayoutY(445);
+        holdDie3.setStyle("-fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
         
         holdDie4 = new Button("Hold");
         holdDie4.setId("4");
@@ -252,6 +313,7 @@ public class GameUI {
         holdDie4.setMaxSize(100, 25);
         holdDie4.setLayoutX(680);
         holdDie4.setLayoutY(595);
+        holdDie4.setStyle("-fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
 
         holdDie5 = new Button("Hold");
         holdDie5.setId("5");
@@ -259,6 +321,7 @@ public class GameUI {
         holdDie5.setMaxSize(100, 25);
         holdDie5.setLayoutX(680);
         holdDie5.setLayoutY(745);
+        holdDie5.setStyle("-fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
         
         holdDieButtonGroup = new Group(holdDie1, holdDie2, holdDie3, holdDie4, holdDie5);
     }
@@ -314,7 +377,7 @@ public class GameUI {
         rollDice.setLayoutX(425);
         rollDice.setLayoutY(450);
         rollDice.setMinSize(150, 100);
-        rollDice.setStyle("-fx-font: 30 arial");
+        rollDice.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
         rollDice.setWrapText(true);
         rollDice.setOnAction(event -> rollDice());
         
@@ -345,6 +408,7 @@ public class GameUI {
         scoreCard.setLayoutX(50);
         scoreCard.setLayoutY(50);
         scoreCard.setGridLinesVisible(true);
+        scoreCard.setStyle("-fx-background-color: #ffffff");
         
         //Make the grid fixed with two columns
         ColumnConstraints c1 = new ColumnConstraints(); //column 1
@@ -397,7 +461,7 @@ public class GameUI {
         GridPane.setHalignment(total1, HPos.CENTER);
         
         Text bonus = new Text("Bonus if total score >= 63");
-        bonus.setStyle("-fx-font: 20 arial");
+        bonus.setStyle("-fx-font: 18 arial");
         scoreCard.add(bonus, 0, 7);
         GridPane.setHalignment(bonus, HPos.CENTER);
         
@@ -467,7 +531,7 @@ public class GameUI {
         score.setLayoutX(425);
         score.setLayoutY(300);
         score.setMinSize(150, 100);
-        score.setStyle("-fx-font: 22.5 arial");
+        score.setStyle("-fx-font: 22.5 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
         score.setWrapText(true);
         score.setOnAction(event -> displayScoringOptions());
         
@@ -479,7 +543,7 @@ public class GameUI {
         //Check to see if the user has rolled at least once
         if (game.getRollNumber() < 1) return;
         
-        root2.getChildren().remove(7);
+        root2.getChildren().remove(8);
         Group scoreButtonGroup = new Group();
         
         //Upper Section Score Buttons
@@ -488,6 +552,7 @@ public class GameUI {
             scoreOption.setLayoutX(375);
             scoreOption.setLayoutY(55 + (35 * i));
             scoreOption.setMinSize(50, 25);
+            scoreOption.setStyle("-fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
             scoreOption.setId(String.valueOf(i)); //IDs [0-5]
             scoreOption.setOnAction(event -> game.endTurn(Integer.valueOf(scoreOption.getId())));
             scoreButtonGroup.getChildren().add(scoreOption);
@@ -498,6 +563,7 @@ public class GameUI {
             scoreOption.setLayoutX(375);
             scoreOption.setLayoutY(370 + (35 * i));
             scoreOption.setMinSize(50, 25);
+            scoreOption.setStyle("-fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
             scoreOption.setId(String.valueOf(i + 6)); //IDs [6-12]
             scoreOption.setOnAction(event -> game.endTurn(Integer.valueOf(scoreOption.getId())));
             scoreButtonGroup.getChildren().add(scoreOption);
@@ -507,7 +573,7 @@ public class GameUI {
         back.setLayoutX(450);
         back.setLayoutY(300);
         back.setMinSize(150, 100);
-        back.setStyle("-fx-font: 30 arial");
+        back.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
         back.setOnAction(event -> displayOperationButtons());
         
         root2.getChildren().add(scoreButtonGroup);
@@ -517,8 +583,8 @@ public class GameUI {
     //Display roll dice and score points buttons again
     private void displayOperationButtons() {
         //Remove category score buttons and back button
+        root2.getChildren().remove(9);
         root2.getChildren().remove(8);
-        root2.getChildren().remove(7);
         //Add back operation buttons
         root2.getChildren().add(operationButtonGroup);
     }
@@ -584,8 +650,8 @@ public class GameUI {
         turnNum.setText("Turn number: " + game.getTurnNumber());
         
         //Remove the score buttons and add back the operation buttons
+        root2.getChildren().remove(9);
         root2.getChildren().remove(8);
-        root2.getChildren().remove(7);
         root2.getChildren().add(operationButtonGroup);
     }
 
@@ -637,15 +703,16 @@ public class GameUI {
         GridPane.setHalignment(lowerSectionFinal, HPos.CENTER);
         GridPane.setHalignment(grandTotalText, HPos.CENTER);
         
+        root2.getChildren().remove(8);
         root2.getChildren().remove(7);
         root2.getChildren().remove(6);
-        root2.getChildren().remove(5);
-        root2.getChildren().remove(0);
-        root2.getChildren().remove(0);
+        root2.getChildren().remove(1);
+        root2.getChildren().remove(1);
         Text congrats = new Text("Congratulations!\nYou completed the\ngame!");
         congrats.setStyle("-fx-font: 40 arial");
         congrats.setLayoutX(400);
         congrats.setLayoutY(300);
+        congrats.setFill(Color.WHITE);
         root2.getChildren().add(congrats);
     }
 }

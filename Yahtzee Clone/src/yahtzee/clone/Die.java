@@ -32,5 +32,9 @@ public class Die {
     public int getValue() {
         return value;
     }
+
+    public int getId() {
+        return id;
+    }
     
 }
