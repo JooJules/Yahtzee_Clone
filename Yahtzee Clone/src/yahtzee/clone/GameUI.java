@@ -1,5 +1,7 @@
 package yahtzee.clone;
 
+import java.util.ArrayList;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -8,9 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.Scene;
 import javafx.scene.shape.Rectangle;
@@ -24,6 +24,7 @@ public class GameUI {
     //UI global variables during start screens
     //TODO make some varaibles global as necessary
     static int playerNum = 1;
+    static int endGameDisplayIndex = 0;
 
     //UI global variables during gameplay
     private Button holdDie1, holdDie2, holdDie3, holdDie4, holdDie5; //buttons to hold or roll dice
@@ -33,11 +34,11 @@ public class GameUI {
     private Group root2; //the root node to display UI during the game
     private Group die1, die2, die3, die4, die5; //groups that will contain rectangle and value for a die
     private static Group diceGroup; //a group that will contain all five dice
-    private static GridPane scoreCard; //a grid that will contain the scorecard
     private static Group operationButtonGroup = new Group(); //a group for buttons to roll dice and access scorecard
     private Text rollNum, turnNum; //display roll count and turn number to user
     private static Image background = new Image("background.jpg", 800, 800, false, true);
     private static ImageView backgroundView = new ImageView(background);
+    private static ArrayList<Integer> grandTotals = new ArrayList<Integer>();
 
     
     //Game UI should also be a singleton
@@ -59,7 +60,6 @@ public class GameUI {
         startbtn.setLayoutY(400);
         startbtn.setMinSize(100, 50);
         startbtn.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
-        //startbtn.setOnAction(event -> game.startGame(primaryStage, this));
         startbtn.setOnAction(event -> displayPlayerSelect(primaryStage));
         
         Text title = new Text("Yahtzee");
@@ -354,11 +354,11 @@ public class GameUI {
         turnNum.setLayoutY(80);
         turnNum.setFill(Color.WHITE);
 
-        Text gameTitle = new Text("YAHTZEE");
-        gameTitle.setStyle("-fx-font: 40 arial");
-        gameTitle.setLayoutX(100);
-        gameTitle.setLayoutY(40);
-        gameTitle.setFill(Color.WHITE);
+        Text playerTurn = new Text(game.getPlayers().get(0).getName() + "\'s turn");
+        playerTurn.setStyle("-fx-font: 40 arial");
+        playerTurn.setLayoutX(100);
+        playerTurn.setLayoutY(40);
+        playerTurn.setFill(Color.WHITE);
         
         Text author = new Text("Programmed by Julia D.");
         author.setStyle("-fx-font: 20 arial");
@@ -366,7 +366,9 @@ public class GameUI {
         author.setLayoutY(775);
         author.setFill(Color.WHITE);
 
-        root2 = new Group(backgroundView, diceGroup, holdDieButtonGroup, scoreCard, author, gameTitle, rollNum, turnNum, operationButtonGroup);
+        //Player 1's scorecard is displayed since they will always go first.
+        root2 = new Group(backgroundView, diceGroup, holdDieButtonGroup, 
+        game.getPlayers().get(0).getScoreCard().getCard(), author, playerTurn, rollNum, turnNum, operationButtonGroup);
         Scene gameboard = new Scene(root2, 800, 800);
         return gameboard;
     }
@@ -551,128 +553,12 @@ public class GameUI {
         rollNum.setText("Roll number: " + game.getRollNumber());
     }
 
+    //Create the score cards for each player
     private void createScoreCard() {
-        scoreCard = new GridPane();
-        scoreCard.setMinSize(300, 700);
-        scoreCard.setLayoutX(50);
-        scoreCard.setLayoutY(50);
-        scoreCard.setGridLinesVisible(true);
-        scoreCard.setStyle("-fx-background-color: #ffffff");
-        
-        //Make the grid fixed with two columns
-        ColumnConstraints c1 = new ColumnConstraints(); //column 1
-        ColumnConstraints c2 = new ColumnConstraints(); //column 2
-        c1.setPercentWidth(75);
-        c2.setPercentWidth(25);
-        scoreCard.getColumnConstraints().addAll(c1, c2);
-        
-        //Make the grid fixed with 20 rows
-        int numRows = 20;
-        for (int i = 0; i < numRows; i++) {
-            RowConstraints rc = new RowConstraints();
-            rc.setPercentHeight(100/numRows);
-            scoreCard.getRowConstraints().add(rc);
+        for (int i = 0; i < game.getPlayers().size(); i++) {
+            ScoreCard playerScoreCard = new ScoreCard();
+            game.getPlayers().get(i).setScoreCard(playerScoreCard);
         }
-        
-        Text aces = new Text("ACES");
-        aces.setStyle("-fx-font: 20 arial");
-        scoreCard.add(aces, 0, 0);
-        GridPane.setHalignment(aces, HPos.CENTER);
-        
-        Text twos = new Text("TWOS");
-        twos.setStyle("-fx-font: 20 arial");
-        scoreCard.add(twos, 0, 1);
-        GridPane.setHalignment(twos, HPos.CENTER);
-        
-        Text threes = new Text("THREES");
-        threes.setStyle("-fx-font: 20 arial");
-        scoreCard.add(threes, 0, 2);
-        GridPane.setHalignment(threes, HPos.CENTER);
-        
-        Text fours = new Text("FOURS");
-        fours.setStyle("-fx-font: 20 arial");
-        scoreCard.add(fours, 0, 3);
-        GridPane.setHalignment(fours, HPos.CENTER);
-        
-        Text fives = new Text("FIVES");
-        fives.setStyle("-fx-font: 20 arial");
-        scoreCard.add(fives, 0, 4);
-        GridPane.setHalignment(fives, HPos.CENTER);
-        
-        Text sixes = new Text("SIXES");
-        sixes.setStyle("-fx-font: 20 arial");
-        scoreCard.add(sixes, 0, 5);
-        GridPane.setHalignment(sixes, HPos.CENTER);
-        
-        Text total1 = new Text("Total Score");
-        total1.setStyle("-fx-font: 20 arial");
-        scoreCard.add(total1, 0, 6);
-        GridPane.setHalignment(total1, HPos.CENTER);
-        
-        Text bonus = new Text("Bonus if total score >= 63");
-        bonus.setStyle("-fx-font: 18 arial");
-        scoreCard.add(bonus, 0, 7);
-        GridPane.setHalignment(bonus, HPos.CENTER);
-        
-        Text total2 = new Text("Total");
-        total2.setStyle("-fx-font: 20 arial");
-        scoreCard.add(total2, 0, 8);
-        GridPane.setHalignment(total2, HPos.CENTER);
-        
-        Text threeAKind = new Text("3 of a Kind");
-        threeAKind.setStyle("-fx-font: 20 arial");
-        scoreCard.add(threeAKind, 0, 9);
-        GridPane.setHalignment(threeAKind, HPos.CENTER);
-        
-        Text fourAKind = new Text("4 of a Kind");
-        fourAKind.setStyle("-fx-font: 20 arial");
-        scoreCard.add(fourAKind, 0, 10);
-        GridPane.setHalignment(fourAKind, HPos.CENTER);
-        
-        Text fullHouse = new Text("Full House");
-        fullHouse.setStyle("-fx-font: 20 arial");
-        scoreCard.add(fullHouse, 0, 11);
-        GridPane.setHalignment(fullHouse, HPos.CENTER);
-        
-        Text smallStraight = new Text("Small Straight");
-        smallStraight.setStyle("-fx-font: 20 arial");
-        scoreCard.add(smallStraight, 0, 12);
-        GridPane.setHalignment(smallStraight, HPos.CENTER);
-        
-        Text largeStraight = new Text("Large Straight");
-        largeStraight.setStyle("-fx-font: 20 arial");
-        scoreCard.add(largeStraight, 0, 13);
-        GridPane.setHalignment(largeStraight, HPos.CENTER);
-        
-        Text yahtzee = new Text("YAHTZEE");
-        yahtzee.setStyle("-fx-font: 20 arial");
-        scoreCard.add(yahtzee, 0, 14);
-        GridPane.setHalignment(yahtzee, HPos.CENTER);
-        
-        Text chance = new Text("Chance");
-        chance.setStyle("-fx-font: 20 arial");
-        scoreCard.add(chance, 0, 15);
-        GridPane.setHalignment(chance, HPos.CENTER);
-        
-        Text yahtzeeBonus = new Text("YAHTZEE BONUS");
-        yahtzeeBonus.setStyle("-fx-font: 20 arial");
-        scoreCard.add(yahtzeeBonus, 0, 16);
-        GridPane.setHalignment(yahtzeeBonus, HPos.CENTER);
-        
-        Text lowerTotal = new Text("Total of Lower Section");
-        lowerTotal.setStyle("-fx-font: 20 arial");
-        scoreCard.add(lowerTotal, 0, 17);
-        GridPane.setHalignment(lowerTotal, HPos.CENTER);
-        
-        Text upperTotal = new Text("Total of Upper Section");
-        upperTotal.setStyle("-fx-font: 20 arial");
-        scoreCard.add(upperTotal, 0, 18);
-        GridPane.setHalignment(upperTotal, HPos.CENTER);
-        
-        Text grandTotal = new Text("GRAND TOTAL");
-        grandTotal.setStyle("-fx-font: 20 arial");
-        scoreCard.add(grandTotal, 0, 19);
-        GridPane.setHalignment(grandTotal, HPos.CENTER);
     }
 
     private void createScorePointsButton() {
@@ -739,49 +625,49 @@ public class GameUI {
     }
 
     //Method to write in points on scorecard
-    public void displayEndTurnScore(int points, int scoreOptionID) {
+    public void displayEndTurnScore(int points, int scoreOptionID, Player scoringPlayer) {
         Text pointsUI = new Text(String.valueOf(points));
         pointsUI.setStyle("-fx-font: 20 arial");
         
         switch (scoreOptionID) {
             case 0: //ones
-                scoreCard.add(pointsUI, 1, 0);
+                scoringPlayer.getScoreCard().getCard().add(pointsUI, 1, 0);
                 break;
             case 1: //twos
-                scoreCard.add(pointsUI, 1, 1);
+                scoringPlayer.getScoreCard().getCard().add(pointsUI, 1, 1);
                 break;
             case 2: //threes
-                scoreCard.add(pointsUI, 1, 2);
+                scoringPlayer.getScoreCard().getCard().add(pointsUI, 1, 2);
                 break;
             case 3: //fours
-                scoreCard.add(pointsUI, 1, 3);
+                scoringPlayer.getScoreCard().getCard().add(pointsUI, 1, 3);
                 break;
             case 4: //fives
-                scoreCard.add(pointsUI, 1, 4);
+                scoringPlayer.getScoreCard().getCard().add(pointsUI, 1, 4);
                 break;
             case 5: //sixes
-                scoreCard.add(pointsUI, 1, 5);
+                scoringPlayer.getScoreCard().getCard().add(pointsUI, 1, 5);
                 break;
             case 6: //three of a kind
-                scoreCard.add(pointsUI, 1, 9);
+                scoringPlayer.getScoreCard().getCard().add(pointsUI, 1, 9);
                 break;
             case 7: //four of a kind
-                scoreCard.add(pointsUI, 1, 10);
+                scoringPlayer.getScoreCard().getCard().add(pointsUI, 1, 10);
                 break;
             case 8: //full house
-                scoreCard.add(pointsUI, 1, 11);
+                scoringPlayer.getScoreCard().getCard().add(pointsUI, 1, 11);
                 break;
             case 9: //small straight
-                scoreCard.add(pointsUI, 1, 12);
+                scoringPlayer.getScoreCard().getCard().add(pointsUI, 1, 12);
                 break;
             case 10: //large straight
-                scoreCard.add(pointsUI, 1, 13);
+                scoringPlayer.getScoreCard().getCard().add(pointsUI, 1, 13);
                 break;
             case 11: //yahtzee
-                scoreCard.add(pointsUI, 1, 14);
+                scoringPlayer.getScoreCard().getCard().add(pointsUI, 1, 14);
                 break;
             case 12: //chance
-                scoreCard.add(pointsUI, 1, 15);
+                scoringPlayer.getScoreCard().getCard().add(pointsUI, 1, 15);
                 break;
         }
         
@@ -797,71 +683,142 @@ public class GameUI {
         holdDie5.setText("Hold");
         rollNum.setText("Roll number: " + game.getRollNumber());
         turnNum.setText("Turn number: " + game.getTurnNumber());
+
+        //Find the player who rolls next
+        Player playerToRoll = null;
+        for (int i = 0; i < game.getPlayers().size(); i++) {
+            if (game.getPlayers().get(i).getTheirTurn()) {
+                playerToRoll = game.getPlayers().get(i);
+                break;
+            }
+        }
+        Text playerTurn = new Text(playerToRoll.getName() + "\'s turn");
+        playerTurn.setStyle("-fx-font: 40 arial");
+        playerTurn.setLayoutX(100);
+        playerTurn.setLayoutY(40);
+        playerTurn.setFill(Color.WHITE);
         
-        //Remove the score buttons and add back the operation buttons
+        //Remove the score buttons and add back the operation buttons. Update player's turn text and get their scorecard to appear.
         root2.getChildren().remove(9);
         root2.getChildren().remove(8);
         root2.getChildren().add(operationButtonGroup);
+        root2.getChildren().set(5, playerTurn);
+        root2.getChildren().set(3, playerToRoll.getScoreCard().getCard());
     }
 
-    //Method to display UI at end of game. Method should only be called once.
-    public void endGame(int lowerSectionPoints, int upperSectionPoints, int grandTotal, Score score) {
+    //Method to display bonus totals UI at the end of the game. Method should only be called once for each player.
+    public void writeTotals(int lowerSectionPoints, int upperSectionPoints, int grandTotal, Player player) {
         Text topBonus = new Text(), yahtzeeBonus = new Text(), upperTotalB4Bonus = new Text(), upperTotalAfterBonus = new Text(), 
             lowerSectionFinal = new Text(), grandTotalText = new Text(), upperTotalAfterBonus2 = new Text();
 
-        if (score.getTopBonus()) {
+        if (player.getScore().getTopBonus()) {
             upperTotalB4Bonus.setText(String.valueOf(upperSectionPoints - 35));
             topBonus.setText("35");
-            scoreCard.add(topBonus, 1, 7);
+            player.getScoreCard().getCard().add(topBonus, 1, 7);
         } else {
             upperTotalB4Bonus.setText(String.valueOf(upperSectionPoints));
             topBonus.setText("0");
-            scoreCard.add(topBonus, 1, 7);
+            player.getScoreCard().getCard().add(topBonus, 1, 7);
         }
         topBonus.setStyle("-fx-font: 20 arial");
         GridPane.setHalignment(topBonus, HPos.CENTER);
         
         upperTotalAfterBonus.setText(String.valueOf(upperSectionPoints));
-        scoreCard.add(upperTotalB4Bonus, 1, 6);
-        scoreCard.add(upperTotalAfterBonus, 1, 8);
+        player.getScoreCard().getCard().add(upperTotalB4Bonus, 1, 6);
+        player.getScoreCard().getCard().add(upperTotalAfterBonus, 1, 8);
         upperTotalB4Bonus.setStyle("-fx-font: 20 arial");
         upperTotalAfterBonus.setStyle("-fx-font: 20 arial");
         GridPane.setHalignment(upperTotalB4Bonus, HPos.CENTER);
         GridPane.setHalignment(upperTotalAfterBonus, HPos.CENTER);
         //complier doesn't like duplicate node children in grids.
         upperTotalAfterBonus2.setText(String.valueOf(upperSectionPoints));
-        scoreCard.add(upperTotalAfterBonus2, 1, 18);
+        player.getScoreCard().getCard().add(upperTotalAfterBonus2, 1, 18);
         upperTotalAfterBonus2.setStyle("-fx-font: 20 arial");
         GridPane.setHalignment(upperTotalAfterBonus2, HPos.CENTER);
         
-        if (score.getYahtzeeCount() >= 1) {
-           yahtzeeBonus.setText(String.valueOf((score.getYahtzeeCount()) * 100)); 
+        if (player.getScore().getYahtzeeCount() >= 1) {
+           yahtzeeBonus.setText(String.valueOf((player.getScore().getYahtzeeCount()) * 100)); 
         } else {
             yahtzeeBonus.setText("0");
         }
-        scoreCard.add(yahtzeeBonus, 1, 16);
+        player.getScoreCard().getCard().add(yahtzeeBonus, 1, 16);
         yahtzeeBonus.setStyle("-fx-font: 20 arial");
         GridPane.setHalignment(yahtzeeBonus, HPos.CENTER);
         
         lowerSectionFinal.setText(String.valueOf(lowerSectionPoints));
         grandTotalText.setText(String.valueOf(grandTotal));
-        scoreCard.add(lowerSectionFinal, 1, 17);
-        scoreCard.add(grandTotalText, 1, 19);
+        player.getScoreCard().getCard().add(lowerSectionFinal, 1, 17);
+        player.getScoreCard().getCard().add(grandTotalText, 1, 19);
         lowerSectionFinal.setStyle("-fx-font: 20 arial");
         grandTotalText.setStyle("-fx-font: 20 arial");
         GridPane.setHalignment(lowerSectionFinal, HPos.CENTER);
         GridPane.setHalignment(grandTotalText, HPos.CENTER);
-        
-        root2.getChildren().remove(8);
-        root2.getChildren().remove(7);
-        root2.getChildren().remove(6);
-        root2.getChildren().remove(1);
-        root2.getChildren().remove(1);
-        Text congrats = new Text("Congratulations!\nYou completed the\ngame!");
+
+        grandTotals.add(grandTotal);
+    }
+
+    //Method to tell the players who the winner is.
+    public void displayWinner() {
+        //Find out who the winner is
+        int max = 0;
+        for (int i = 0; i < grandTotals.size(); i++) {
+            if (grandTotals.get(i) > max) {
+                max = grandTotals.get(i);
+                endGameDisplayIndex = i;
+            }
+        }
+        Player winningPlayer = game.getPlayers().get(endGameDisplayIndex);
+        Text congrats = new Text();
+
+        //Remove UI elements not necessary for end game.
+        root2.getChildren().remove(8); //Roll dice and score points buttons
+        root2.getChildren().remove(7); //Turn number
+        root2.getChildren().remove(6); //Roll number
+        root2.getChildren().remove(1); //The dice
+        root2.getChildren().remove(1); //The hold/roll dice buttons
+
+        //Add congratulations text to UI
+        if (game.getPlayers().size() == 1) {
+            congrats.setText("Congratulations!\nYou completed the\ngame!");
+        } else {
+            congrats.setText("Congratulations!\n" + winningPlayer.getName() + " won!");
+        }
         congrats.setStyle("-fx-font: 40 arial");
         congrats.setLayoutX(400);
         congrats.setLayoutY(300);
         congrats.setFill(Color.WHITE);
         root2.getChildren().add(congrats);
+
+        //Display winner player's score card first at the end
+        Text cardOwner = new Text(winningPlayer.getName() + "\'s score");
+        cardOwner.setStyle("-fx-font: 40 arial");
+        cardOwner.setLayoutX(100);
+        cardOwner.setLayoutY(40);
+        cardOwner.setFill(Color.WHITE);
+        root2.getChildren().set(1, game.getPlayers().get(endGameDisplayIndex).getScoreCard().getCard());
+        root2.getChildren().set(3, cardOwner);
+
+        Button navCards = new Button(">");
+        navCards.setLayoutX(400);
+        navCards.setLayoutY(700);
+        navCards.setMinSize(20, 10);
+        navCards.setStyle("-fx-font: 20 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
+        navCards.setWrapText(true);
+        navCards.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+                if ((endGameDisplayIndex + 1) == game.getPlayers().size()) {
+                    endGameDisplayIndex = 0;
+                    cardOwner.setText(game.getPlayers().get(endGameDisplayIndex).getName() + "\'s score");
+                    root2.getChildren().set(1, game.getPlayers().get(endGameDisplayIndex).getScoreCard().getCard());
+                    root2.getChildren().set(3, cardOwner);
+                } else {
+                    endGameDisplayIndex++;
+                    cardOwner.setText(game.getPlayers().get(endGameDisplayIndex).getName() + "\'s score");
+                    root2.getChildren().set(1, game.getPlayers().get(endGameDisplayIndex).getScoreCard().getCard());
+                    root2.getChildren().set(3, cardOwner);
+                }
+            }
+        });
+        if (game.getPlayers().size() != 1) root2.getChildren().add(navCards);
     }
 }

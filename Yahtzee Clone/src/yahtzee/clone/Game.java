@@ -8,7 +8,6 @@ public class Game {
     private Die die; //die object
     private static ArrayList<Die> dice = new ArrayList<Die>(); //stores the dice objects
     private int rollNumber, turnNumber; //track roll and turn counts
-    private static Score score = new Score(); //score object
     private GameUI UI;
     private static ArrayList<Player> players = new ArrayList<Player>(); //stores the player objects
     
@@ -51,6 +50,7 @@ public class Game {
         turnNumber = 1;
         
         Scene scene = UI.createGameUI();
+        players.get(0).setTheirTurn(true);
         primaryStage.setScene(scene);
         
     }
@@ -86,21 +86,42 @@ public class Game {
     }
     
     public void endTurn(int scoreOptionID) {
+        Player scoringPlayer = null;
+        //Find the player who is scoring
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i).getTheirTurn()) {
+                scoringPlayer = players.get(i);
+                break;
+            }
+        }
+
         //Calculate points score for turn if category not chosen yet.
-        int points = score.determineScore(dice, scoreOptionID);
+        int points = scoringPlayer.getScore().determineScore(dice, scoreOptionID);
         
         //The check that indicates the user has already scored in the selected category.
         if (points == -1) return;
 
-        UI.displayEndTurnScore(points, scoreOptionID);
+        UI.displayEndTurnScore(points, scoreOptionID, scoringPlayer);
         
-        newTurn();
+        newTurn(scoringPlayer);
     }
     
     //Method to reset dice toRoll booleans, roll count, and individual dice hold buttons
-    //Also updates turn count. Method gets called after updating scorecard.
-    private void newTurn() {
-        turnNumber++;
+    //Also updates turn count and player's turn. Method gets called after updating scorecard.
+    private void newTurn(Player justScoredPlayer) {
+        //if there is only one player in the game, then their theirTurn boolean will always remain true.
+        if (players.size() != 1) {
+            if (justScoredPlayer.getId() == players.get(players.size() - 1).getId()) {
+                turnNumber++;
+                players.get(0).setTheirTurn(true);
+            } else {
+                players.get(justScoredPlayer.getId()).setTheirTurn(true);
+            }
+            justScoredPlayer.setTheirTurn(false);
+        } else {
+            turnNumber++;
+        }
+        
         rollNumber = 0;
         for (int i = 0; i < dice.size(); i++) {
             dice.get(i).setToRoll(true);
@@ -115,10 +136,13 @@ public class Game {
     
     //When the game is over. There's 13 turns in Yahtzee.
     private void endGame() {
-        int lowerSectionPoints = score.lowerSection(); //has bonus applied to score
-        int upperSectionPoints = score.upperSection(); //has bonuses applied to score
-        int grandTotal = lowerSectionPoints + upperSectionPoints;
+        for (int i = 0; i < players.size(); i++) {
+            int lowerSectionPoints = players.get(i).getScore().lowerSection(); //has bonus applied to score
+            int upperSectionPoints = players.get(i).getScore().upperSection(); //has bonuses applied to score
+            int grandTotal = lowerSectionPoints + upperSectionPoints;
         
-        UI.endGame(lowerSectionPoints, upperSectionPoints, grandTotal, score);
+            UI.writeTotals(lowerSectionPoints, upperSectionPoints, grandTotal, players.get(i));
+        }
+        UI.displayWinner();
     }
 }
