@@ -1,7 +1,10 @@
 package yahtzee.clone;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,7 +21,11 @@ public class GameUI {
     
     Game game = Game.instance();
 
-    //UI global variables
+    //UI global variables during start screens
+    //TODO make some varaibles global as necessary
+    static int playerNum = 1;
+
+    //UI global variables during gameplay
     private Button holdDie1, holdDie2, holdDie3, holdDie4, holdDie5; //buttons to hold or roll dice
     private static Group holdDieButtonGroup; //buttons that go underneath a die to indicate if it's being held or rolled
     private Text num1, num2, num3, num4, num5; //to display dice values
@@ -52,7 +59,8 @@ public class GameUI {
         startbtn.setLayoutY(400);
         startbtn.setMinSize(100, 50);
         startbtn.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
-        startbtn.setOnAction(event -> game.startGame(primaryStage, this));
+        //startbtn.setOnAction(event -> game.startGame(primaryStage, this));
+        startbtn.setOnAction(event -> displayPlayerSelect(primaryStage));
         
         Text title = new Text("Yahtzee");
         title.setStyle("-fx-font: 120 arial");
@@ -109,6 +117,143 @@ public class GameUI {
         primaryStage.setTitle("Yahtzee");
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    public void displayPlayerSelect(Stage primaryStage) {
+        Text title = new Text("Yahtzee");
+        title.setStyle("-fx-font: 120 arial");
+        title.setLayoutX(175);
+        title.setLayoutY(150);
+        title.setFill(Color.WHITE);
+        title.setStroke(Color.BLACK);
+        title.setStrokeWidth(2);
+
+        Text author = new Text("Programmed by Julia D.");
+        author.setStyle("-fx-font: 20 arial");
+        author.setLayoutX(5);
+        author.setLayoutY(775);
+        author.setFill(Color.WHITE);
+
+        Text players = new Text("Select number of players");
+        players.setStyle("-fx-font: 50 arial");
+        players.setLayoutX(130);
+        players.setLayoutY(250);
+        players.setFill(Color.WHITE);
+        players.setStroke(Color.BLACK);
+        players.setStrokeWidth(1);
+
+        Button playerbtn1 = new Button();
+        playerbtn1.setText("One Player");
+        playerbtn1.setLayoutX(150);
+        playerbtn1.setLayoutY(400);
+        playerbtn1.setMinSize(100, 50);
+        playerbtn1.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
+        playerbtn1.setOnAction(event -> enterPlayerName(primaryStage, 1));
+
+        Button playerbtn2 = new Button();
+        playerbtn2.setText("Two Players");
+        playerbtn2.setLayoutX(440);
+        playerbtn2.setLayoutY(400);
+        playerbtn2.setMinSize(100, 50);
+        playerbtn2.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
+        playerbtn2.setOnAction(event -> enterPlayerName(primaryStage, 2));
+
+        Button back = new Button();
+        back.setText("Back");
+        back.setLayoutX(335);
+        back.setLayoutY(500);
+        back.setMinSize(100, 50);
+        back.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
+        back.setOnAction(event -> displayStartScreen(primaryStage));
+
+        Image die1 = new Image("Die 1.png", 100, 100, true, true);
+        ImageView viewDie1 = new ImageView(die1);
+        viewDie1.setX(50);
+        viewDie1.setY(50);
+
+        Image die2 = new Image("Die 2.png", 125, 125, true, true);
+        ImageView viewDie2 = new ImageView(die2);
+        viewDie2.setX(65);
+        viewDie2.setY(600);
+
+        Image die3 = new Image("Die 3.png", 150, 150, true, true);
+        ImageView viewDie3 = new ImageView(die3);
+        viewDie3.setX(600);
+        viewDie3.setY(600);
+
+        Group diceGroup = new Group(viewDie1, viewDie2, viewDie3);
+        Group objects = new Group(backgroundView, title, author, players, playerbtn1, playerbtn2, back);
+
+        root = new Group(objects, diceGroup);
+
+        Scene scene = new Scene(root, 800, 800);
+        primaryStage.setScene(scene);
+    }
+
+    public void enterPlayerName(Stage primaryStage, int players) {
+        //System.out.println("The number of players playing is " + players);
+        Text title = new Text("Yahtzee");
+        title.setStyle("-fx-font: 120 arial");
+        title.setLayoutX(175);
+        title.setLayoutY(150);
+        title.setFill(Color.WHITE);
+        title.setStroke(Color.BLACK);
+        title.setStrokeWidth(2);
+
+        Text author = new Text("Programmed by Julia D.");
+        author.setStyle("-fx-font: 20 arial");
+        author.setLayoutX(5);
+        author.setLayoutY(775);
+        author.setFill(Color.WHITE);
+
+        Image die1 = new Image("Die 1.png", 100, 100, true, true);
+        ImageView viewDie1 = new ImageView(die1);
+        viewDie1.setX(50);
+        viewDie1.setY(50);
+
+        Image die2 = new Image("Die 2.png", 125, 125, true, true);
+        ImageView viewDie2 = new ImageView(die2);
+        viewDie2.setX(65);
+        viewDie2.setY(600);
+
+        Image die3 = new Image("Die 3.png", 150, 150, true, true);
+        ImageView viewDie3 = new ImageView(die3);
+        viewDie3.setX(600);
+        viewDie3.setY(600);
+
+        Group diceGroup = new Group(viewDie1, viewDie2, viewDie3);
+        Group objects = new Group(backgroundView, title, diceGroup, author);
+
+        Text instructions = new Text("Please enter the name of player " + playerNum);
+        instructions.setStyle("-fx-font: 40 arial");
+        instructions.setLayoutX(100);
+        instructions.setLayoutY(250);
+        instructions.setFill(Color.WHITE);
+        instructions.setStroke(Color.BLACK);
+        instructions.setStrokeWidth(1);
+
+        TextField nameField = new TextField();
+        nameField.setLayoutX(300);
+        nameField.setLayoutY(400);
+        nameField.setMinHeight(10);
+        nameField.setMinWidth(200);
+        nameField.setStyle("-fx-background-color: #741315; -fx-text-fill: #ffffff");
+        nameField.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+                game.createPlayer(playerNum, nameField.getText());
+
+                if (playerNum == players) {
+                    startTheGame(primaryStage);
+                }
+                instructions.setText("Please enter the name of player " + ++playerNum);
+                nameField.setText("");
+            }
+        });
+
+        root = new Group(objects, diceGroup, nameField, instructions);
+
+        Scene scene = new Scene(root, 800, 800);
+        primaryStage.setScene(scene);
     }
     
     public void displayAbout(Stage primaryStage) {
@@ -181,7 +326,11 @@ public class GameUI {
         
         Scene scene = new Scene(root, 800, 800);
         primaryStage.setScene(scene);
-        
+    }
+
+    //Method to actually start the game. EventHandlers, man.
+    private void startTheGame(Stage primaryStage) {
+        game.startGame(primaryStage, this);
     }
 
     //Main method to create UI for gameplay. Should only be called once.

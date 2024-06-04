@@ -10,6 +10,7 @@ public class Game {
     private int rollNumber, turnNumber; //track roll and turn counts
     private static Score score = new Score(); //score object
     private GameUI UI;
+    private static ArrayList<Player> players = new ArrayList<Player>(); //stores the player objects
     
     //Game is a singleton as we need only 1 game
     private static Game uniqueInstance = null;
@@ -32,6 +33,14 @@ public class Game {
 
     public ArrayList<Die> getDice() {
         return dice;
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public void createPlayer(int id, String name) {
+        players.add(new Player(id, name));
     }
     
     public void startGame(Stage primaryStage, GameUI UI) {
