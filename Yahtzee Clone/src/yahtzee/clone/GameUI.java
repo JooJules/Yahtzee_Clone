@@ -22,9 +22,19 @@ public class GameUI {
     Game game = Game.instance();
 
     //UI global variables during start screens
-    //TODO make some varaibles global as necessary
     static int playerNum = 1;
     static int endGameDisplayIndex = 0;
+    private static Image background;
+    private static ImageView backgroundView;
+    private static Text author;
+    private static Image diePic1;
+    private static ImageView diePic1View;
+    private static Image diePic2;
+    private static ImageView diePic2View;
+    private static Image diePic3;
+    private static ImageView diePic3View;
+    private static Text title;
+    private static Text summary;
 
     //UI global variables during gameplay
     private Button holdDie1, holdDie2, holdDie3, holdDie4, holdDie5; //buttons to hold or roll dice
@@ -36,14 +46,50 @@ public class GameUI {
     private static Group diceGroup; //a group that will contain all five dice
     private static Group operationButtonGroup = new Group(); //a group for buttons to roll dice and access scorecard
     private Text rollNum, turnNum; //display roll count and turn number to user
-    private static Image background = new Image("background.jpg", 800, 800, false, true);
-    private static ImageView backgroundView = new ImageView(background);
     private static ArrayList<Integer> grandTotals = new ArrayList<Integer>();
-
     
     //Game UI should also be a singleton
     private static GameUI uniqueInstance = null;
-    private GameUI() {}
+    private GameUI() {
+        background = new Image("background.jpg", 800, 800, false, true);
+        backgroundView = new ImageView(background);
+        author = new Text("Programmed by Julia D.");
+        author.setStyle("-fx-font: 20 arial");
+        author.setLayoutX(5);
+        author.setLayoutY(775);
+        author.setFill(Color.WHITE);
+
+        diePic1 = new Image("Die 1.png", 100, 100, true, true);
+        diePic1View = new ImageView(diePic1);
+        diePic1View.setX(50);
+        diePic1View.setY(50);
+
+        diePic2 = new Image("Die 2.png", 125, 125, true, true);
+        diePic2View = new ImageView(diePic2);
+        diePic2View.setX(65);
+        diePic2View.setY(600);
+
+        diePic3 = new Image("Die 3.png", 150, 150, true, true);
+        diePic3View = new ImageView(diePic3);
+        diePic3View.setX(600);
+        diePic3View.setY(600);
+
+        title = new Text("Yahtzee");
+        title.setStyle("-fx-font: 120 arial");
+        title.setLayoutX(175);
+        title.setLayoutY(150);
+        title.setFill(Color.WHITE);
+        title.setStroke(Color.BLACK);
+        title.setStrokeWidth(2);
+
+        summary = new Text("The famous 5-dice game");
+        summary.setStyle("-fx-font: 40 arial");
+        summary.setLayoutX(180);
+        summary.setLayoutY(200);
+        summary.setFill(Color.WHITE);
+        summary.setStroke(Color.BLACK);
+        summary.setStrokeWidth(1);
+    }
 
     public static GameUI instance() {
         if (uniqueInstance == null) {
@@ -62,51 +108,14 @@ public class GameUI {
         startbtn.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
         startbtn.setOnAction(event -> displayPlayerSelect(primaryStage));
         
-        Text title = new Text("Yahtzee");
-        title.setStyle("-fx-font: 120 arial");
-        title.setLayoutX(175);
-        title.setLayoutY(150);
-        title.setFill(Color.WHITE);
-        title.setStroke(Color.BLACK);
-        title.setStrokeWidth(2);
-        
-        Text summary = new Text("The famous 5-dice game");
-        summary.setStyle("-fx-font: 40 arial");
-        summary.setLayoutX(180);
-        summary.setLayoutY(200);
-        summary.setFill(Color.WHITE);
-        summary.setStroke(Color.BLACK);
-        summary.setStrokeWidth(1);
-        
         Button about = new Button("About");
         about.setMinSize(194,50);
         about.setLayoutX(300);
         about.setLayoutY(475);
         about.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
         about.setOnAction(event -> displayAbout(primaryStage));
-        
-        Text author = new Text("Programmed by Julia D.");
-        author.setStyle("-fx-font: 20 arial");
-        author.setLayoutX(5);
-        author.setLayoutY(775);
-        author.setFill(Color.WHITE);
 
-        Image die1 = new Image("Die 1.png", 100, 100, true, true);
-        ImageView viewDie1 = new ImageView(die1);
-        viewDie1.setX(50);
-        viewDie1.setY(50);
-
-        Image die2 = new Image("Die 2.png", 125, 125, true, true);
-        ImageView viewDie2 = new ImageView(die2);
-        viewDie2.setX(65);
-        viewDie2.setY(600);
-
-        Image die3 = new Image("Die 3.png", 150, 150, true, true);
-        ImageView viewDie3 = new ImageView(die3);
-        viewDie3.setX(600);
-        viewDie3.setY(600);
-
-        Group diceGroup = new Group(viewDie1, viewDie2, viewDie3);
+        Group diceGroup = new Group(diePic1View, diePic2View, diePic3View);
         
         Group objects = new Group();
         objects.getChildren().addAll(startbtn, title, summary, about, author, diceGroup);
@@ -120,20 +129,6 @@ public class GameUI {
     }
 
     public void displayPlayerSelect(Stage primaryStage) {
-        Text title = new Text("Yahtzee");
-        title.setStyle("-fx-font: 120 arial");
-        title.setLayoutX(175);
-        title.setLayoutY(150);
-        title.setFill(Color.WHITE);
-        title.setStroke(Color.BLACK);
-        title.setStrokeWidth(2);
-
-        Text author = new Text("Programmed by Julia D.");
-        author.setStyle("-fx-font: 20 arial");
-        author.setLayoutX(5);
-        author.setLayoutY(775);
-        author.setFill(Color.WHITE);
-
         Text players = new Text("Select number of players");
         players.setStyle("-fx-font: 50 arial");
         players.setLayoutX(130);
@@ -166,22 +161,7 @@ public class GameUI {
         back.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
         back.setOnAction(event -> displayStartScreen(primaryStage));
 
-        Image die1 = new Image("Die 1.png", 100, 100, true, true);
-        ImageView viewDie1 = new ImageView(die1);
-        viewDie1.setX(50);
-        viewDie1.setY(50);
-
-        Image die2 = new Image("Die 2.png", 125, 125, true, true);
-        ImageView viewDie2 = new ImageView(die2);
-        viewDie2.setX(65);
-        viewDie2.setY(600);
-
-        Image die3 = new Image("Die 3.png", 150, 150, true, true);
-        ImageView viewDie3 = new ImageView(die3);
-        viewDie3.setX(600);
-        viewDie3.setY(600);
-
-        Group diceGroup = new Group(viewDie1, viewDie2, viewDie3);
+        Group diceGroup = new Group(diePic1View, diePic2View, diePic3View);
         Group objects = new Group(backgroundView, title, author, players, playerbtn1, playerbtn2, back);
 
         root = new Group(objects, diceGroup);
@@ -191,37 +171,7 @@ public class GameUI {
     }
 
     public void enterPlayerName(Stage primaryStage, int players) {
-        //System.out.println("The number of players playing is " + players);
-        Text title = new Text("Yahtzee");
-        title.setStyle("-fx-font: 120 arial");
-        title.setLayoutX(175);
-        title.setLayoutY(150);
-        title.setFill(Color.WHITE);
-        title.setStroke(Color.BLACK);
-        title.setStrokeWidth(2);
-
-        Text author = new Text("Programmed by Julia D.");
-        author.setStyle("-fx-font: 20 arial");
-        author.setLayoutX(5);
-        author.setLayoutY(775);
-        author.setFill(Color.WHITE);
-
-        Image die1 = new Image("Die 1.png", 100, 100, true, true);
-        ImageView viewDie1 = new ImageView(die1);
-        viewDie1.setX(50);
-        viewDie1.setY(50);
-
-        Image die2 = new Image("Die 2.png", 125, 125, true, true);
-        ImageView viewDie2 = new ImageView(die2);
-        viewDie2.setX(65);
-        viewDie2.setY(600);
-
-        Image die3 = new Image("Die 3.png", 150, 150, true, true);
-        ImageView viewDie3 = new ImageView(die3);
-        viewDie3.setX(600);
-        viewDie3.setY(600);
-
-        Group diceGroup = new Group(viewDie1, viewDie2, viewDie3);
+        Group diceGroup = new Group(diePic1View, diePic2View, diePic3View);
         Group objects = new Group(backgroundView, title, diceGroup, author);
 
         Text instructions = new Text("Please enter the name of player " + playerNum);
@@ -257,28 +207,6 @@ public class GameUI {
     }
     
     public void displayAbout(Stage primaryStage) {
-        Text title = new Text("Yahtzee");
-        title.setStyle("-fx-font: 120 arial");
-        title.setLayoutX(175);
-        title.setLayoutY(150);
-        title.setFill(Color.WHITE);
-        title.setStroke(Color.BLACK);
-        title.setStrokeWidth(2);
-        
-        Text summary = new Text("The famous 5-dice game");
-        summary.setStyle("-fx-font: 40 arial");
-        summary.setLayoutX(180);
-        summary.setLayoutY(200);
-        summary.setFill(Color.WHITE);
-        summary.setStroke(Color.BLACK);
-        summary.setStrokeWidth(1);
-        
-        Text author = new Text("Programmed by Julia D.");
-        author.setStyle("-fx-font: 20 arial");
-        author.setLayoutX(5);
-        author.setLayoutY(775);
-        author.setFill(Color.WHITE);
-        
         Text about = new Text();
         about.setLayoutX(10);
         about.setLayoutY(230);
@@ -305,22 +233,7 @@ public class GameUI {
         back.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
         back.setOnAction(event -> displayStartScreen(primaryStage));
 
-        Image die1 = new Image("Die 1.png", 100, 100, true, true);
-        ImageView viewDie1 = new ImageView(die1);
-        viewDie1.setX(50);
-        viewDie1.setY(50);
-
-        Image die2 = new Image("Die 2.png", 125, 125, true, true);
-        ImageView viewDie2 = new ImageView(die2);
-        viewDie2.setX(65);
-        viewDie2.setY(600);
-
-        Image die3 = new Image("Die 3.png", 150, 150, true, true);
-        ImageView viewDie3 = new ImageView(die3);
-        viewDie3.setX(600);
-        viewDie3.setY(600);
-
-        Group diceGroup = new Group(viewDie1, viewDie2, viewDie3);
+        Group diceGroup = new Group(diePic1View, diePic2View, diePic3View);
         
         root = new Group(backgroundView, title, summary, author, back, about, diceGroup);
         
@@ -360,11 +273,11 @@ public class GameUI {
         playerTurn.setLayoutY(40);
         playerTurn.setFill(Color.WHITE);
         
-        Text author = new Text("Programmed by Julia D.");
-        author.setStyle("-fx-font: 20 arial");
-        author.setLayoutX(5);
-        author.setLayoutY(775);
-        author.setFill(Color.WHITE);
+        // Text author = new Text("Programmed by Julia D.");
+        // author.setStyle("-fx-font: 20 arial");
+        // author.setLayoutX(5);
+        // author.setLayoutY(775);
+        // author.setFill(Color.WHITE);
 
         //Player 1's scorecard is displayed since they will always go first.
         root2 = new Group(backgroundView, diceGroup, holdDieButtonGroup, 
