@@ -6,7 +6,7 @@ public class Score {
     
     private final int arraySize = 5;
     private final int max = 6;
-    private static ArrayList<Integer> scores = new ArrayList<Integer>(); //arraylist to store scores for end calc
+    private ArrayList<Integer> scores = new ArrayList<Integer>(); //arraylist to store scores for end calc
     private boolean topBonus = false; //helps with top section bonus
     private int yahtzeeCount = 0; //tracks extra yahtzees
     
@@ -87,8 +87,8 @@ public class Score {
             sum += scores.get(i);
         }
         
-        int temp = yahtzeeCount; //the first yahtzee does not count towards the bonus
-        while (temp > 1) {
+        int temp = yahtzeeCount;
+        while (temp >= 1) {
             sum += 100;
             temp--;
         }
@@ -130,7 +130,7 @@ public class Score {
        return countArray;
     }
     
-    //Will need methods to determine scores for all possible categories
+    //Methods to determine scores for all lower section categories
     private int threeAKind(int[] occurances) {
         for (int i = 0; i < occurances.length; i++) {
             if (occurances[i] >= 3) {
