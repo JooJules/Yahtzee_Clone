@@ -226,21 +226,13 @@ public class GameUI {
     public void displayAbout(Stage primaryStage) {
         Text about = new Text();
         about.setLayoutX(10);
-        about.setLayoutY(230);
-        about.setStyle("-fx-font: 20 arial");
-        about.setText("This project is a recreation of the classic game known as Yahtzee."
-                + " The game is entirely\nprogrammed with Java and JavaFX."
+        about.setLayoutY(240);
+        about.setStyle("-fx-font: 30 arial");
+        about.setText("This project is a recreation of the classic game known as\nYahtzee."
+                + " The game is entirely programmed with Java and \nJavaFX."
                 + " The game has also been designed with the\nassumption that the player"
-                + " already knows how to play Yahtzee. If you don't know"
-                + " how\nto play the game, the rules can be found online or on the GitHub repo."
-                + "\n\nThis is also not the programmer's first attempt at recreating"
-                + " Yahtzee, as she tried to do\nit when she only knew the bare bones"
-                + " of the Java programming langauge. This first\nedition was never"
-                + " posted anywhere; it was simply terrible code: buggy, and easy for\n"
-                + "the player to cheat. Now three years later, with the additional knowledge she has"
-                + "\nlearned from her classes, the programmer revamped one of her very first projects."
-                + " Now\nit is not easy to cheat, the scoring logic has improved,"
-                + " and the game has an actual GUI.");
+                + " already knows how to play\nYahtzee. If you don't know"
+                + " how to play the game, the rules\ncan be found online or on the GitHub repo:\nhttps://github.com/JooJules/Yahtzee_Clone");
         about.setFill(Color.WHITE);
         
         Button back = new Button("Back");
