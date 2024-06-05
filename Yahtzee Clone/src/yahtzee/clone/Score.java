@@ -58,7 +58,6 @@ public class Score {
                 break;
             case 10: //large straight
                 toReturn = largeStraight(occuranceArray);
-                scores.set(scoreOptionID, toReturn);
                 break;
             case 11: //yahtzee
                 toReturn = yahtzee(occuranceArray);
@@ -118,9 +117,21 @@ public class Score {
     public int getYahtzeeCount() {
         return yahtzeeCount;
     }
+
+    public void setYahtzeeCount(int count) {
+        yahtzeeCount = count;
+    }
+
+    public ArrayList<Integer> getScores() {
+        return scores;
+    }
+
+    public void setScores(ArrayList<Integer> scores) {
+        this.scores = scores;
+    }
     
     //Method that counts occurances of each number on a die
-    private int[] doCounting(ArrayList<Die> dice) {
+    public int[] doCounting(ArrayList<Die> dice) {
        int[] countArray = new int[max + 1];
        
        for (int i = 0; i < arraySize; i++) {
@@ -131,7 +142,7 @@ public class Score {
     }
     
     //Methods to determine scores for all lower section categories
-    private int threeAKind(int[] occurances) {
+    public int threeAKind(int[] occurances) {
         for (int i = 0; i < occurances.length; i++) {
             if (occurances[i] >= 3) {
                 return ((1 * occurances[1]) + (2 * occurances[2]) + (3 * occurances[3])
@@ -142,7 +153,7 @@ public class Score {
         return 0;
     }
     
-    private int fourAKind(int[] occurances) {
+    public int fourAKind(int[] occurances) {
         for (int i = 0; i < occurances.length; i++) {
             if (occurances[i] >= 4) {
                 return ((1 * occurances[1]) + (2 * occurances[2]) + (3 * occurances[3])
@@ -153,7 +164,7 @@ public class Score {
         return 0;
     }
     
-    private int fullHouse(int[] occurances) {
+    public int fullHouse(int[] occurances) {
         boolean apair = false;
         boolean atoak = false;
         
@@ -170,7 +181,7 @@ public class Score {
         return 0;
     }
     
-    private int smallStraight(int[] occurances) {
+    public int smallStraight(int[] occurances) {
         //base case: you need a 3 and a 4 in a small straight
         if ((occurances[3] == 0) || (occurances[4] == 0)) return 0;
         
@@ -186,7 +197,7 @@ public class Score {
         return 0;
     }
     
-    private int largeStraight(int[] occurances) {
+    public int largeStraight(int[] occurances) {
         //base case: you cannot have a 1 and a 6 in a large straight
         if ((occurances[1] > 0) && (occurances[6] > 0)) return 0;
         
@@ -201,7 +212,7 @@ public class Score {
         return 0;
     }
     
-    private int yahtzee(int[] occurances) {
+    public int yahtzee(int[] occurances) {
         for (int i = 0; i < occurances.length; i++) {
             if (occurances[i] == 5) {
                 return 50;
@@ -211,7 +222,7 @@ public class Score {
         return 0;
     }
     
-    private int chance(int[] occurances) {
+    public int chance(int[] occurances) {
         return ((1 * occurances[1]) + (2 * occurances[2]) + (3 * occurances[3])
                 + (4 * occurances[4]) + (5 * occurances[5]) + (6 * occurances[6]));
     }

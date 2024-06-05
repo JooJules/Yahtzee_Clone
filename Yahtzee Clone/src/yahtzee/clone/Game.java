@@ -34,6 +34,10 @@ public class Game {
         return dice;
     }
 
+    public void setDice(ArrayList<Die> dice) {
+        Game.dice = dice;
+    }
+
     public ArrayList<Player> getPlayers() {
         return players;
     }
