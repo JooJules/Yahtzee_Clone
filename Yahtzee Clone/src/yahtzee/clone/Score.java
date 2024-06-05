@@ -87,8 +87,8 @@ public class Score {
             sum += scores.get(i);
         }
         
-        int temp = yahtzeeCount; //the first yahtzee does not count towards the bonus
-        while (temp > 1) {
+        int temp = yahtzeeCount;
+        while (temp >= 1) {
             sum += 100;
             temp--;
         }

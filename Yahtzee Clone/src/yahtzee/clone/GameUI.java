@@ -103,7 +103,7 @@ public class GameUI {
         Button startbtn = new Button();
         startbtn.setText("Start Game");
         startbtn.setLayoutX(300);
-        startbtn.setLayoutY(400);
+        startbtn.setLayoutY(330);
         startbtn.setMinSize(100, 50);
         startbtn.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
         startbtn.setOnAction(event -> displayPlayerSelect(primaryStage));
@@ -111,7 +111,7 @@ public class GameUI {
         Button about = new Button("About");
         about.setMinSize(194,50);
         about.setLayoutX(300);
-        about.setLayoutY(475);
+        about.setLayoutY(405);
         about.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
         about.setOnAction(event -> displayAbout(primaryStage));
 
@@ -140,7 +140,7 @@ public class GameUI {
         Button playerbtn1 = new Button();
         playerbtn1.setText("One Player");
         playerbtn1.setLayoutX(150);
-        playerbtn1.setLayoutY(400);
+        playerbtn1.setLayoutY(300);
         playerbtn1.setMinSize(100, 50);
         playerbtn1.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
         playerbtn1.setOnAction(event -> enterPlayerName(primaryStage, 1));
@@ -148,10 +148,26 @@ public class GameUI {
         Button playerbtn2 = new Button();
         playerbtn2.setText("Two Players");
         playerbtn2.setLayoutX(440);
-        playerbtn2.setLayoutY(400);
+        playerbtn2.setLayoutY(300);
         playerbtn2.setMinSize(100, 50);
         playerbtn2.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
         playerbtn2.setOnAction(event -> enterPlayerName(primaryStage, 2));
+
+        Button playerbtn3 = new Button();
+        playerbtn3.setText("Three Players");
+        playerbtn3.setLayoutX(150);
+        playerbtn3.setLayoutY(400);
+        playerbtn3.setMinSize(100, 50);
+        playerbtn3.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
+        playerbtn3.setOnAction(event -> enterPlayerName(primaryStage, 3));
+
+        Button playerbtn4 = new Button();
+        playerbtn4.setText("Four Players");
+        playerbtn4.setLayoutX(440);
+        playerbtn4.setLayoutY(400);
+        playerbtn4.setMinSize(100, 50);
+        playerbtn4.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
+        playerbtn4.setOnAction(event -> enterPlayerName(primaryStage, 4));
 
         Button back = new Button();
         back.setText("Back");
@@ -161,8 +177,9 @@ public class GameUI {
         back.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
         back.setOnAction(event -> displayStartScreen(primaryStage));
 
+        Group playerbtnGroup = new Group(playerbtn1, playerbtn2, playerbtn3, playerbtn4);
         Group diceGroup = new Group(diePic1View, diePic2View, diePic3View);
-        Group objects = new Group(backgroundView, title, author, players, playerbtn1, playerbtn2, back);
+        Group objects = new Group(backgroundView, title, author, players, playerbtnGroup, back);
 
         root = new Group(objects, diceGroup);
 
