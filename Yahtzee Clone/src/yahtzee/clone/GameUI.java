@@ -19,7 +19,8 @@ import javafx.stage.Stage;
 
 public class GameUI {
     
-    Game game = Game.instance();
+    private Game game = Game.instance();
+    private static Stage theStage;
 
     //UI global variables during start screens
     static int playerNum = 1;
@@ -100,20 +101,21 @@ public class GameUI {
 
     //Methods pertaining to the start screens.
     public void displayStartScreen(Stage primaryStage) {
+        if (theStage == null) theStage = primaryStage;
         Button startbtn = new Button();
         startbtn.setText("Start Game");
         startbtn.setLayoutX(300);
         startbtn.setLayoutY(330);
         startbtn.setMinSize(100, 50);
         startbtn.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
-        startbtn.setOnAction(event -> displayPlayerSelect(primaryStage));
+        startbtn.setOnAction(event -> displayPlayerSelect());
         
         Button about = new Button("About");
         about.setMinSize(194,50);
         about.setLayoutX(300);
         about.setLayoutY(405);
         about.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
-        about.setOnAction(event -> displayAbout(primaryStage));
+        about.setOnAction(event -> displayAbout());
 
         Group diceGroup = new Group(diePic1View, diePic2View, diePic3View);
         
@@ -123,12 +125,12 @@ public class GameUI {
         root = new Group(backgroundView, objects);
         Scene scene = new Scene(root, 800, 800);
         
-        primaryStage.setTitle("Yahtzee");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        theStage.setTitle("Yahtzee");
+        theStage.setScene(scene);
+        theStage.show();
     }
 
-    public void displayPlayerSelect(Stage primaryStage) {
+    public void displayPlayerSelect() {
         Text players = new Text("Select number of players");
         players.setStyle("-fx-font: 50 arial");
         players.setLayoutX(130);
@@ -143,7 +145,7 @@ public class GameUI {
         playerbtn1.setLayoutY(300);
         playerbtn1.setMinSize(100, 50);
         playerbtn1.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
-        playerbtn1.setOnAction(event -> enterPlayerName(primaryStage, 1));
+        playerbtn1.setOnAction(event -> enterPlayerName(1));
 
         Button playerbtn2 = new Button();
         playerbtn2.setText("Two Players");
@@ -151,7 +153,7 @@ public class GameUI {
         playerbtn2.setLayoutY(300);
         playerbtn2.setMinSize(100, 50);
         playerbtn2.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
-        playerbtn2.setOnAction(event -> enterPlayerName(primaryStage, 2));
+        playerbtn2.setOnAction(event -> enterPlayerName(2));
 
         Button playerbtn3 = new Button();
         playerbtn3.setText("Three Players");
@@ -159,7 +161,7 @@ public class GameUI {
         playerbtn3.setLayoutY(400);
         playerbtn3.setMinSize(100, 50);
         playerbtn3.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
-        playerbtn3.setOnAction(event -> enterPlayerName(primaryStage, 3));
+        playerbtn3.setOnAction(event -> enterPlayerName(3));
 
         Button playerbtn4 = new Button();
         playerbtn4.setText("Four Players");
@@ -167,7 +169,7 @@ public class GameUI {
         playerbtn4.setLayoutY(400);
         playerbtn4.setMinSize(100, 50);
         playerbtn4.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
-        playerbtn4.setOnAction(event -> enterPlayerName(primaryStage, 4));
+        playerbtn4.setOnAction(event -> enterPlayerName(4));
 
         Button back = new Button();
         back.setText("Back");
@@ -175,7 +177,7 @@ public class GameUI {
         back.setLayoutY(500);
         back.setMinSize(100, 50);
         back.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
-        back.setOnAction(event -> displayStartScreen(primaryStage));
+        back.setOnAction(event -> displayStartScreen(theStage));
 
         Group playerbtnGroup = new Group(playerbtn1, playerbtn2, playerbtn3, playerbtn4);
         Group diceGroup = new Group(diePic1View, diePic2View, diePic3View);
@@ -184,10 +186,10 @@ public class GameUI {
         root = new Group(objects, diceGroup);
 
         Scene scene = new Scene(root, 800, 800);
-        primaryStage.setScene(scene);
+        theStage.setScene(scene);
     }
 
-    public void enterPlayerName(Stage primaryStage, int players) {
+    public void enterPlayerName(int players) {
         Group diceGroup = new Group(diePic1View, diePic2View, diePic3View);
         Group objects = new Group(backgroundView, title, diceGroup, author);
 
@@ -210,7 +212,7 @@ public class GameUI {
                 game.createPlayer(playerNum, nameField.getText());
 
                 if (playerNum == players) {
-                    startTheGame(primaryStage);
+                    startTheGame();
                 }
                 instructions.setText("Please enter the name of player " + ++playerNum);
                 nameField.setText("");
@@ -220,10 +222,10 @@ public class GameUI {
         root = new Group(objects, diceGroup, nameField, instructions);
 
         Scene scene = new Scene(root, 800, 800);
-        primaryStage.setScene(scene);
+        theStage.setScene(scene);
     }
     
-    public void displayAbout(Stage primaryStage) {
+    public void displayAbout() {
         Text about = new Text();
         about.setLayoutX(10);
         about.setLayoutY(240);
@@ -240,19 +242,19 @@ public class GameUI {
         back.setLayoutX(300);
         back.setLayoutY(475);
         back.setStyle("-fx-font: 30 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
-        back.setOnAction(event -> displayStartScreen(primaryStage));
+        back.setOnAction(event -> displayStartScreen(theStage));
 
         Group diceGroup = new Group(diePic1View, diePic2View, diePic3View);
         
         root = new Group(backgroundView, title, summary, author, back, about, diceGroup);
         
         Scene scene = new Scene(root, 800, 800);
-        primaryStage.setScene(scene);
+        theStage.setScene(scene);
     }
 
     //Method to actually start the game. EventHandlers, man.
-    private void startTheGame(Stage primaryStage) {
-        game.startGame(primaryStage, this);
+    private void startTheGame() {
+        game.startGame(theStage, this);
     }
 
     //Main method to create UI for gameplay. Should only be called once.
@@ -281,12 +283,6 @@ public class GameUI {
         playerTurn.setLayoutX(100);
         playerTurn.setLayoutY(40);
         playerTurn.setFill(Color.WHITE);
-        
-        // Text author = new Text("Programmed by Julia D.");
-        // author.setStyle("-fx-font: 20 arial");
-        // author.setLayoutX(5);
-        // author.setLayoutY(775);
-        // author.setFill(Color.WHITE);
 
         //Player 1's scorecard is displayed since they will always go first.
         root2 = new Group(backgroundView, diceGroup, holdDieButtonGroup, 
@@ -502,28 +498,42 @@ public class GameUI {
         
         root2.getChildren().remove(8);
         Group scoreButtonGroup = new Group();
+
+        //Find the player who is scoring.
+        Player scoringPlayer = null;
+        for (int i = 0; i < game.getPlayers().size(); i++) {
+            if (game.getPlayers().get(i).getTheirTurn()) {
+                scoringPlayer = game.getPlayers().get(i);
+                break;
+            }
+        }
         
         //Upper Section Score Buttons
         for (int i = 0; i < 6; i++) {
-            Button scoreOption = new Button("Score");
-            scoreOption.setLayoutX(375);
-            scoreOption.setLayoutY(55 + (35 * i));
-            scoreOption.setMinSize(50, 25);
-            scoreOption.setStyle("-fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
-            scoreOption.setId(String.valueOf(i)); //IDs [0-5]
-            scoreOption.setOnAction(event -> game.endTurn(Integer.valueOf(scoreOption.getId())));
-            scoreButtonGroup.getChildren().add(scoreOption);
+            //Don't display the button if the player has already scored a category
+            if (scoringPlayer.getScore().getScores().get(i) == -1) {
+                Button scoreOption = new Button("Score");
+                scoreOption.setLayoutX(375);
+                scoreOption.setLayoutY(55 + (35 * i));
+                scoreOption.setMinSize(50, 25);
+                scoreOption.setStyle("-fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
+                scoreOption.setId(String.valueOf(i)); //IDs [0-5]
+                scoreOption.setOnAction(event -> game.endTurn(Integer.valueOf(scoreOption.getId())));
+                scoreButtonGroup.getChildren().add(scoreOption);
+            }
         }
         //Lower Section Score Buttons
         for (int i = 0; i < 7; i++) {
-            Button scoreOption = new Button("Score");
-            scoreOption.setLayoutX(375);
-            scoreOption.setLayoutY(370 + (35 * i));
-            scoreOption.setMinSize(50, 25);
-            scoreOption.setStyle("-fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
-            scoreOption.setId(String.valueOf(i + 6)); //IDs [6-12]
-            scoreOption.setOnAction(event -> game.endTurn(Integer.valueOf(scoreOption.getId())));
-            scoreButtonGroup.getChildren().add(scoreOption);
+            if (scoringPlayer.getScore().getScores().get(i + 6) == -1) {
+                Button scoreOption = new Button("Score");
+                scoreOption.setLayoutX(375);
+                scoreOption.setLayoutY(370 + (35 * i));
+                scoreOption.setMinSize(50, 25);
+                scoreOption.setStyle("-fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
+                scoreOption.setId(String.valueOf(i + 6)); //IDs [6-12]
+                scoreOption.setOnAction(event -> game.endTurn(Integer.valueOf(scoreOption.getId())));
+                scoreButtonGroup.getChildren().add(scoreOption);
+            }
         }
         
         Button back = new Button("Back");
@@ -742,5 +752,23 @@ public class GameUI {
             }
         });
         if (game.getPlayers().size() != 1) root2.getChildren().add(navCards);
+
+        Button restart = new Button("New Game");
+        restart.setLayoutX(500);
+        restart.setLayoutY(600);
+        restart.setMinSize(150, 75);
+        restart.setStyle("-fx-font: 20 arial; -fx-border-width: 1; -fx-border-color: #000000; -fx-background-color: #741315; -fx-text-fill: #ffffff");
+        restart.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+                //Clear previous game data and reset variables.
+                root2.getChildren().clear();
+                playerNum = 1;
+                endGameDisplayIndex = 0;
+                grandTotals.clear();
+                game.clearData();
+                displayStartScreen(theStage);
+            }
+        });
+        root2.getChildren().add(restart);
     }
 }
