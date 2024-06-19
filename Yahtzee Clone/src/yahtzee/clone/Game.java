@@ -48,7 +48,9 @@ public class Game {
     
     public void startGame(Stage primaryStage, GameUI UI) {
         this.UI = UI;
-        createDice();
+
+        //Do not need to create the dice again if it is not the first game.
+        if (dice.isEmpty()) createDice();
         
         rollNumber = 0;
         turnNumber = 1;
@@ -148,5 +150,10 @@ public class Game {
             UI.writeTotals(lowerSectionPoints, upperSectionPoints, grandTotal, players.get(i));
         }
         UI.displayWinner();
+    }
+
+    //Method to remove player data for new game. Only called through the 'new game' button at the end.
+    public void clearData() {
+        players.clear();
     }
 }
